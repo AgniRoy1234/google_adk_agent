@@ -41,7 +41,10 @@ price_retrieval_agent = LlmAgent(
         "   - Call the `get_stock_price_on_dates` tool using the calculated Start Date and End Date.\n"
         "4. **Handling Market Closures**:\n"
         "   - If a date falls on a weekend/holiday, retry using the nearest available trading day.\n"
-        "   - Pass the raw price data forward to the next step."
+        "5. **Strict Communication Rule**:\n"
+        "   - Output strictly the raw stock price data and dates retrieved.\n"
+        "   - **Do NOT** calculate, estimate, mention, or comment on any percentage change, stock performance, "
+        "or trends. All calculations and comments on performance are handled by a downstream agent."
     ),
     tools=[get_current_date, get_stock_price_on_dates],
     output_key="stock_prices",
@@ -59,7 +62,8 @@ calculation_agent = LlmAgent(
         "1. Take the stock price data retrieved from the previous step.\n"
         "2. Pass those values directly into the 'calculate_percentage_change' tool.\n"
         "3. Format the final output clearly for the user, showing the percentage change "
-        "and relevant details. Do not estimate prices; strictly use the tool results.\n"
+        "and relevant details. Do not estimate prices or perform manual percentage calculations; "
+        "strictly use and comment on the tool results.\n"
         "STOCK PRICES : {stock_prices}"
     ),
     tools=[calculate_percentage_change],
